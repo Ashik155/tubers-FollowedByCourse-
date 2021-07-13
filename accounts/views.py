@@ -3,7 +3,7 @@ from django.contrib.auth import logout
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate,login
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
@@ -11,17 +11,14 @@ def login_page(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        print(username, password)
-        user = authenticate( username = username)
-        print(user)
-        print("user from db", User.objects.filter(username=username, password=password))
-        print("user is fetched from DB")
+    
+        user = authenticate(request=request, username = username , password = password)
+
         if user is not None:
             print("user found")
-            
-            auth.login(request, user)
-            messages.success(request, "Logged innnnn")
-            redirect('dashboard')
+            login(request, user)
+            messages.success(request, "Logged innnnn performed...")
+            return redirect('dashboard')
 
         else:
             print("user not found ")
@@ -30,7 +27,7 @@ def login_page(request):
 
 
      
-    return render(request, 'accounts/login.html')
+    return render(request, 'accounts/login_page.html')
 
 
 def register(request):
@@ -50,7 +47,7 @@ def register(request):
                     messages.error(request, 'Ooops, Email is already in use, choose another one ')
                     return redirect('register')
                 else:
-                    user = User.objects.create(first_name=first_name,last_name=last_name,username=user_name,email=email,password=password)
+                    user = User.objects.create_user(first_name=first_name,last_name=last_name,username=user_name,email=email,password=password)
                     user.save()
                     messages.success(request,'Heya'+first_name+" your account has been created successfully.. ")
                     return redirect('login_page')
@@ -64,6 +61,6 @@ def logout_user(request):
     logout(request)
     return redirect('home')
 
-
+@login_required(login_url='login_page')
 def dashboard(request):
     return render(request, 'accounts/dashboard.html')

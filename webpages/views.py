@@ -25,3 +25,6 @@ def services(req):
 
 def about(req):
     return render(req, 'webpages/about.html')
+
+def plots(req):
+    return render(req, 'webpages/plots.html')

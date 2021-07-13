@@ -28,6 +28,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_REDIRECT_URL = 'dashboard'
+
+#google 87355074402-7idjmc9ohhqklsqvsnuq9vllcq34r9m0.apps.googleusercontent.com
+#sec l-v7H0m29GyIZM1Ta5OAa7nH
 
 # Application definition
 
@@ -39,12 +43,18 @@ INSTALLED_APPS = [
     'djangocms_admin_style',
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ckeditor',
-    
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+     'allauth.socialaccount.providers.google',
+      'allauth.socialaccount.providers.facebook'
+
 ]
 
 MIDDLEWARE = [
@@ -56,6 +66,17 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'offline',
+        }
+    }
+}
 
 ROOT_URLCONF = 'tubers.urls'
 
@@ -139,3 +160,5 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SITE_ID = 1
